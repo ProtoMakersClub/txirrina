@@ -1,0 +1,2 @@
+* Deshabilitar llamadas de espacios comunes
+*
