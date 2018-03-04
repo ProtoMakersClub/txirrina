@@ -45,11 +45,11 @@ const byte countColumns = 4;
 const byte rowsPins[countRows] = { 3, 2, 1, 0 };
 const byte columnsPins[countColumns] = { 7, 6, 5, 4 };
 
-int keys[countRows][countColumns] = {
-   { '1','2','3', 'A' },
-   { '4','5','6', 'B' },
-   { '7','8','9', 'C' },
-   { '#','0','*', 'D' }
+String keys[countRows][countColumns] = {
+   { "1","2","3", "A" },
+   { "4","5","6", "B" },
+   { "7","8","9", "C" },
+   { "#","0","*", "D" }
 };
 
 bool readKeypad()
@@ -115,8 +115,11 @@ void loop()
       prevMillis = millis();
       if (readKeypad())   // Detección de tecla pulsada
       {
-          int x=keys[iRow][iCol];
-         LCD.print((char)keys[iRow][iCol]);   // Mostrar tecla
+          //Serial.println(iRow);
+
+          String x=keys[iRow][iCol];
+          Particle.publish("key",x);
+         //LCD.print(keys[iRow][iCol]);   // Mostrar tecla
          delay(100);
       }
    }
