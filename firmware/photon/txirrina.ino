@@ -18,6 +18,11 @@ that this code will work on any other LCDs or backpacks.
 
 ***********************************************************/
 
+#define RELAY_PIN 2
+#define RELAY_LED_PIN 3
+#define ENABLE_RELAY_LED
+#define RELAY_DELAY 2000
+
 #include "SparkFun_Serial_Graphic_LCD.h"//inculde the Serial Graphic LCD library
 
 //This demo code was created for both the 128x64 and the 160x128 pixel LCD.
@@ -37,20 +42,22 @@ that this code will work on any other LCDs or backpacks.
 LCD LCD;
 const unsigned long period = 50;
 unsigned long prevMillis = 0;
-
+ 
 byte iRow = 0, iCol = 0;
 const byte countRows = 4;
 const byte countColumns = 4;
-
-const byte rowsPins[countRows] = { 3, 2, 1, 0 };
+ 
+const byte rowsPins[countRows] = { A1, A2, A3, A4 };
 const byte columnsPins[countColumns] = { 7, 6, 5, 4 };
-
+ 
 String keys[countRows][countColumns] = {
    { "1","2","3", "A" },
    { "4","5","6", "B" },
    { "7","8","9", "C" },
    { "#","0","*", "D" }
 };
+
+String keyBuffer;
 
 bool readKeypad()
 {
@@ -59,7 +66,7 @@ bool readKeypad()
    {
     // pinMode(rowsPins[r], OUTPUT);
       digitalWrite(rowsPins[r], LOW);      // Poner en LOW fila
-
+ 
       // Comprobar la fila
       for (byte c = 0; c < countColumns; c++)
       {
@@ -70,7 +77,7 @@ bool readKeypad()
             return true;
          }
       }
-
+      
     //  pinMode(rowsPins[r], HIGH);         // Ponen en HIGH fila
       digitalWrite(rowsPins[r], INPUT);   // Poner en alta impedancia
    }
@@ -79,6 +86,11 @@ bool readKeypad()
 
 void setup()
 {
+pinMode(RELAY_PIN,OUTPUT);
+#ifdef ENABLE_RELAY_LED
+    pinMode(RELAY_LED_PIN,OUTPUT);
+#endif
+Particle.function("ireki",handleIreki);
 //we're just going to run through a bunch of demos to show the functionality of the LCD.
 
 delay(1200);///wait for the one second spalsh screen before anything is sent to the LCD.
@@ -95,7 +107,7 @@ delay(1500);
 
 
 Serial.begin(9600);
-
+ 
    for (byte c = 0; c < countColumns; c++)
    {
       pinMode(columnsPins[c], INPUT_PULLUP);
@@ -116,11 +128,32 @@ void loop()
       if (readKeypad())   // Detección de tecla pulsada
       {
           //Serial.println(iRow);
-
-          String x=keys[iRow][iCol];
-          Particle.publish("key",x);
-         //LCD.print(keys[iRow][iCol]);   // Mostrar tecla
+          
+          String currentKey=keys[iRow][iCol];
+          if(currentKey == "#"){
+            Particle.publish("key",keyBuffer);
+            keyBuffer = "";
+          } else if (currentKey == "*") {
+            keyBuffer = "";
+          } else {
+            keyBuffer += currentKey;
+          }
+         
+         LCD.print(*keyBuffer);   // Mostrar tecla
          delay(100);
       }
    }
 }
+
+int handleIreki(String command) {
+    digitalWrite(RELAY_PIN,HIGH);
+    #ifdef ENABLE_RELAY_LED
+        digitalWrite(RELAY_LED_PIN,HIGH);
+    #endif
+    delay(RELAY_DELAY);
+    digitalWrite(RELAY_PIN,LOW);
+    #ifdef ENABLE_RELAY_LED
+        digitalWrite(RELAY_LED_PIN,LOW);
+    #endif
+}
+
