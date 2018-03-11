@@ -1,10 +1,57 @@
 var express = require('express');
 var app = express();
+var https = require('https');
+var config = require('../server.config.js');
 
-app.get('/getStatus', function (req, res) {
+var Particle = require('particle-api-js');
+var particle = new Particle();
+var token;
+console.log(config);
+particle.login({username: config.particleUsername, password: config.particlePassword}).then(
+  function(data) {
+    token = data.body.access_token;
+    console.log(token);
+  },
+  function (err) {
+    console.log('Could not log in.', err);
+  }
+);
+
+
+app.get('/ping',function (req, res) {
+  var publishEventPr = particle.publishEvent({ name: 'test', data: {}, auth: token });
+
+publishEventPr.then(
+  function(data) {
+    if (data.body.ok) { console.log("Event published succesfully") }
+  },
+  function(err) {
+    console.log("Failed to publish event: " + err)
+  }
+);
   res.json({
     success:true
   });
+});
+app.get('/ireki', function (req, res) {
+  var fnPr = particle.callFunction({ deviceId: config.particleDevice, name: config.particleFunc, argument: 'ireki', auth: token });
+
+    fnPr.then(
+    function(data) {
+      res.json({
+        success:true,
+        data:data
+      });
+      console.log('Function called succesfully:', data);
+    }, function(err) {
+      res.json({
+        success:false,
+        data:err
+      });
+      console.log('An error occurred:', err);
+    });
+
+
 });
 
 // app.post('/login')
