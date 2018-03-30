@@ -1,6 +1,8 @@
 var express = require('express');
 var app = express();
 var https = require('https');
+var cors = require('cors');
+
 var config = require('../server.config.js');
 
 var Particle = require('particle-api-js');
@@ -17,6 +19,8 @@ particle.login({username: config.particleUsername, password: config.particlePass
   }
 );
 
+app.use(cors({origin:"http://192.168.1.34:8000"}));
+app.use(cors({origin:"http://localhost:5000"}));
 
 app.get('/ping',function (req, res) {
   var publishEventPr = particle.publishEvent({ name: 'test', data: {}, auth: token });
