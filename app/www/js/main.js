@@ -48,8 +48,10 @@ function onDeviceReady() {
        // Terms of service url.
        tosUrl: '/'
      };
+     $('.js-btn-logout').addClass('hidden');
      ui.start('#firebaseui-auth-container', uiConfig);
    } else {
+     $('.js-btn-logout').removeClass('hidden');
      $('#firebaseui-auth-container').addClass('hidden');
      $('#txirrina-app').removeClass('hidden');
    }
