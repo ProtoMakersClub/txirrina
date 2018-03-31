@@ -9,6 +9,11 @@ function onDeviceReady() {
   $("#disconnected").hide();
   $('.nori').hide();
   $('.js-btn-ireki').attr('disabled',true).click(sendIreki);
+
+  var notificationSoundEnabled = localStorage.getItem('notificationSoundEnabled');
+  $('.js-sw-notification-sound').attr('checked',(notificationSoundEnabled === 'true')).click(handleSwitchNotificationSound);
+
+  var statusRef = firebase.database().ref('status');
   var deiakRef = firebase.database().ref('deiak').limitToLast(1);
   var fireConfigRef = firebase.database().ref('config');
   var fireConfig;
@@ -18,6 +23,10 @@ function onDeviceReady() {
       //console.log(fireConfig);
       serverURL = "http://" + fireConfig.localIp + ":" + fireConfig.localPort;
       $('.js-btn-ireki').attr('disabled',false);
+      //Hide loader
+      $('#app-loader').addClass('hidden');
+      //Config loaded, show app.
+      $('#txirrina-app').removeClass('hidden');
   });
   firebase.auth().onAuthStateChanged(function(user) {
    window.user = user; // user is undefined if no user signed in
@@ -50,11 +59,16 @@ function onDeviceReady() {
      };
      $('.js-btn-logout').addClass('hidden');
      ui.start('#firebaseui-auth-container', uiConfig);
+     $('#app-loader').hadClass('hidden');
    } else {
      $('.js-btn-logout').removeClass('hidden');
      $('#firebaseui-auth-container').addClass('hidden');
-     $('#txirrina-app').removeClass('hidden');
+
    }
+
+ });
+ statusRef.on('child_changed', function(data) {
+   console.log(data.val());
  });
   deiakRef.on('child_added', function(data) {
 
@@ -65,9 +79,12 @@ function onDeviceReady() {
      } else {
        $('.nori').text(to).data('ts',data.val().ts).fadeIn();
        setTimeout(function(){ $('.nori').fadeOut() }, deiaTimeout);
-       console.log('DEIA');
-       var audio = new Audio('/sounds/doorbell.wav');
-       audio.play();
+       console.log(localStorage.getItem('notificationSoundEnabled'));
+       if(localStorage.getItem('notificationSoundEnabled') === "true"){
+         var audio = new Audio('/sounds/doorbell.wav');
+         audio.play();
+       }
+
      }
 
    });
@@ -89,6 +106,10 @@ function onDeviceReady() {
       }
     });
   }, 1000);*/
+}
+function handleSwitchNotificationSound(ev){
+  var value = $(ev.currentTarget).is(":checked");
+  localStorage.setItem('notificationSoundEnabled',value);
 }
 function sendIreki(ev){
   var handler = function(event) {
