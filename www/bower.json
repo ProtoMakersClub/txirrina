@@ -1,0 +1,14 @@
+{
+  "name": "www",
+  "homepage": "https://github.com/ProtoMakersClub/txirrina",
+  "description": "",
+  "main": "",
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
