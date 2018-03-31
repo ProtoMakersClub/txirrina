@@ -11,11 +11,58 @@
       src="https://code.jquery.com/jquery-2.2.4.min.js"
       integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44="
       crossorigin="anonymous"></script>
+      <script src="https://www.gstatic.com/firebasejs/4.11.0/firebase.js"></script>
+      <script>
+        // Initialize Firebase
+        var config = {
+          apiKey: "AIzaSyD8uq-Lp9TWkpLY7412XMbQLLMs9084SGc",
+          authDomain: "jazar-txirrina.firebaseapp.com",
+          databaseURL: "https://jazar-txirrina.firebaseio.com",
+          projectId: "jazar-txirrina",
+          storageBucket: "jazar-txirrina.appspot.com",
+          messagingSenderId: "878203812308"
+        };
+        firebase.initializeApp(config);
+      </script>
+      <script src="https://www.gstatic.com/firebasejs/4.9.0/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/4.9.0/firebase-database.js"></script>
+  <script src="https://cdn.firebase.com/libs/firebaseui/2.5.1/firebaseui.js"></script>
+<link type="text/css" rel="stylesheet" href="https://cdn.firebase.com/libs/firebaseui/2.5.1/firebaseui.css" />
+
+
+        <script src="js/login.js"></script>
+
+
 
 </head>
 <body>
+  <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
+    <header class="mdl-layout__header">
+      <div class="mdl-layout__header-row">
+        <!-- Title -->
+        <span class="mdl-layout-title">Txirrina</span>
+        <!-- Add spacer, to align navigation to the right -->
+        <div class="mdl-layout-spacer"></div>
+        <!-- Navigation. We hide it in small screens. -->
+        <nav class="mdl-navigation mdl-layout--large-screen-only">
+          <a class="mdl-navigation__link" href="#" onclick="signOut()">Irten</a>
+        </nav>
+      </div>
+    </header>
 
-  
+    <main class="mdl-layout__content">
+      <div class="page-content">
+
+      <div id="firebaseui-auth-container"></div>
+      <div id="loader">Loading...</div>
+      </div>
+    </main>
+  </div>
+
+
+
+
+
 
 
 </body>
