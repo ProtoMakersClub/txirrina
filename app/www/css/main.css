@@ -1,7 +1,10 @@
 body {
-  max-width 980px; !important
+  max-width 360px; !important
 }
-
+/*.mdl-layout {
+  width: 360px;
+}
+*/
 .hidden {
   display:none;
 }
@@ -19,3 +22,34 @@ body {
 /* Rules for using icons as white on a dark background. */
 .material-icons.md-light { color: rgba(255, 255, 255, 1); }
 .material-icons.md-light.md-inactive { color: rgba(255, 255, 255, 0.3); }
+
+.tx-icon-bell {
+  width: 200px;
+  fill: rgb(34, 60, 255);
+}
+
+.tx-icon-key {
+  width: 100px;
+  fill: #555;
+  padding: 20px;
+}
+.tx-icon-key--disabled {
+  fill: #ccc;
+}
+.tx-icon-key--ok {
+  fill: #0e6708;
+}
+.tx-icon-key--error {
+  fill: #d84343;
+}
+
+
+.tx-icon-bell--mute {
+  fill: #ccc;
+}
+.tx-icon-bell--ring {
+  fill: #d93c00;
+}
+.u-fill-ring {
+  fill: red;
+}
