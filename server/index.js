@@ -40,6 +40,9 @@ publishEventPr.then(
 });
 app.get('/ireki', function (req, res) {
   http.get('http://192.168.1.31/ireki',function(data){console.log(data)});
+  res.json({
+    success:true
+  });
 
 });
 app.get('/ireki-photon', function (req, res) {
@@ -65,6 +68,6 @@ app.get('/ireki-photon', function (req, res) {
 
 // app.post('/login')
 
-app.listen(8000, function () {
-  console.log('Example app listening on port 8000!');
+app.listen(5001, function () {
+  console.log('Example app listening on port 5001!');
 });
