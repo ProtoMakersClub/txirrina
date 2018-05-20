@@ -39,10 +39,14 @@ publishEventPr.then(
   });
 });
 app.get('/ireki', function (req, res) {
-  http.get('http://192.168.1.31/ireki',function(data){console.log(data)});
-  res.json({
-    success:true
-  });
+  http.get('http://192.168.1.31/ireki',function(data){
+    res.json({
+      success:true,
+      data:data
+    });
+
+    });
+
 
 });
 app.get('/ireki-photon', function (req, res) {
