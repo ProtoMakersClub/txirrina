@@ -1,5 +1,6 @@
 var express = require('express');
 var app = express();
+var http = require('http');
 var https = require('https');
 var cors = require('cors');
 
@@ -38,6 +39,10 @@ publishEventPr.then(
   });
 });
 app.get('/ireki', function (req, res) {
+  http.get('http://192.168.1.31/ireki',function(data){console.log(data)});
+
+});
+app.get('/ireki-photon', function (req, res) {
   var fnPr = particle.callFunction({ deviceId: config.particleDevice, name: config.particleFunc, argument: 'ireki', auth: token });
 
     fnPr.then(
